@@ -9,8 +9,10 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
     ecmaVersion: 2015,
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
   rules: {
-    'no-console': 'warn',
   },
 };
