@@ -45,20 +45,7 @@ module.exports = {
 
     // Disallow 'console.log', but console.{warn, error, info} is acceptable.
     'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
-
-    // Warn you that a variable is declared but not being used.
-    'no-unused-vars': 'error',
-
-    // The 'use strict' directive is no longer necessary since
-    // ES2015 has fixed JS confusing behaviours.
-    strict: ['error', 'never'],
-
-    // Use easily understood coersion. For example, instead of
-    // using the binary bitwise operator to find a needle in haystack:
-    //     ~haystack.indexOf('needle'),
-    // let's use an expression that easily understood by everybody:
-    //     haystack.indexOf('needle') !== -1
-    'no-implicit-coercion': 'error',
+    // This is not a recomended rules
 
     // --------------------------------------
     // Jest
@@ -102,12 +89,16 @@ module.exports = {
       files: ['**/*.{ts,tsx}'],
 
       extends: [
-        // Disables rules from eslint:recommended which are already
-        // handled by TypeScript. Disabled rules are listed in:
+        // @typescript-eslint and eslint has overlaping rules;
+        // to use @typescript-eslint we need to turn off the some
+        // of the rules endable by eslint:recommended.
+        // These disabled rules are listed in:
         // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/eslint-recommended.ts
         'plugin:@typescript-eslint/eslint-recommended',
 
-        // Enable official typescript recommended rules are listed in:
+        // Typescript officially recommended a set of rule, we
+        // will adopt these recommendations.
+        // These rules are marked with ✅ in:
         //   https://typescript-eslint.io/rules/
         // Link to actual source code:
         //   https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/recommended.ts
@@ -124,17 +115,29 @@ module.exports = {
         // required work around
         // ------------------------------------------
 
-        // Without the following, you will get inconsistent behaviour, see:
-        // https://github.com/typescript-eslint/typescript-eslint/issues/50
+        // For consistency this rule should be off.
+        // This is a required setting, see:
+        //     https://github.com/typescript-eslint/typescript-eslint/issues/50
         '@typescript-eslint/explicit-function-return-type': 'off',
+        // This rule warn you that you have forgotten to annotate the return type
+        // of a function; but usually typescript is able to figure out the
+        // return type of a function, so there is unnecessary.
+
+        // Spacing arround annotation is disable so that it is not
+        // conflicting with:
+        //   eslint-plugin-prettier
+        //   eslint-config-prettier
+        // See:
+        //   https://github.com/prettier/eslint-plugin-prettier#recommended-configuration
+        '@typescript-eslint/type-annotation-spacing': 'off',
 
         // ------------------------------------------
-        // Rule Forgivness,
+        // Rules of forgivness,
         // forgive you for breaking rules.
         // ------------------------------------------
 
-        // We should avoid using @ts-ignore, instead please use
-        // @ts-expect-error.
+        // We should avoid using '@ts-ignore'; instead,
+        // please use '@ts-expect-error'.
         '@typescript-eslint/ban-ts-comment': 'warn',
 
         // -------------------------------------------
@@ -142,24 +145,12 @@ module.exports = {
         // enforcements or relax for spacific reason
         // -------------------------------------------
 
-        // Types must be declared before usage
-        '@typescript-eslint/no-use-before-define': 'off',
-        // Consider using the following setting:
-        // '@typescript-eslint/no-use-before-define': [
-        //   'error',
-        //   {
-        //     enums: true, // warns every reference to a enum before the enum declaration
-        //     typedefs: true, // warns every reference to a type before the type declaration
-        //     ignoreTypeReferences: false, // check all type references.
-        //   },
-        // ],
-
         // Allow use of 'require' statement outside import statements.
         // This is necessary when mock module multiple times with different values, see:
         //   https://stackoverflow.com/questions/49650323/jest-mock-module-multiple-times-with-different-values
-        // And also to get webpack bundle fonts, see:
-        //   see example web-app
+        // And also to get webpack bundle fonts, see: TODO referece required.
         '@typescript-eslint/no-var-requires': 'off',
+        // Recommended rule is 'error'
       },
     },
     // JavaScript files
